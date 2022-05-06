@@ -15,9 +15,11 @@ const config: HardhatUserConfig = {
   solidity: "0.8.8",
   networks: {
       hardhat:{
+        allowUnlimitedContractSize: true,
         chainId:31337
       },
       localhost: {
+        allowUnlimitedContractSize: true,
         chainId:31337
       }
   },

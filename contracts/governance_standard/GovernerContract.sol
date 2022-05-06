@@ -11,10 +11,17 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 contract GovernerContract is Initializable, GovernorUpgradeable, GovernorSettingsUpgradeable, GovernorCountingSimpleUpgradeable, GovernorVotesUpgradeable, GovernorVotesQuorumFractionUpgradeable, GovernorTimelockControlUpgradeable {
     /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() initializer {}
+    constructor(
+    IVotesUpgradeable _token,
+    TimelockControllerUpgradeable _timelock,
+    uint256 _quorumPercentage,
+    uint256 _votingPeriod,
+    uint256 _votingDelay
+    ) initializer {}
 
     function initialize(IVotesUpgradeable _token, TimelockControllerUpgradeable _timelock, uint256 _votingDelay, uint256 _votingPeriod, uint256 _quorumPercentage)
-        initializer public
+   
+   initializer public
     {
         __Governor_init("GovernerContract");
         __GovernorSettings_init(
@@ -26,9 +33,20 @@ contract GovernerContract is Initializable, GovernorUpgradeable, GovernorSetting
         __GovernorVotes_init(_token);
         __GovernorVotesQuorumFraction_init(_quorumPercentage);
         __GovernorTimelockControl_init(_timelock);
+        
     }
 
     // The following functions are overrides required by Solidity.
+
+    // function challengeCycle(string id, address [])
+    // {
+
+    // }
+
+    // function challengePrizePool()
+    // {
+
+    // }
 
     function votingDelay()
         public
@@ -66,6 +84,7 @@ contract GovernerContract is Initializable, GovernorUpgradeable, GovernorSetting
         return super.state(proposalId);
     }
 
+    //challenge creation step
     function propose(address[] memory targets, uint256[] memory values, bytes[] memory calldatas, string memory description)
         public
         override(GovernorUpgradeable, IGovernorUpgradeable)
@@ -97,7 +116,7 @@ contract GovernerContract is Initializable, GovernorUpgradeable, GovernorSetting
     {
         return super._cancel(targets, values, calldatas, descriptionHash);
     }
-
+        //add chainlink oracle
     function _executor()
         internal
         view
